@@ -3,7 +3,8 @@
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
-    thr0w.setBase('http://192.168.1.2');
+// DEV    thr0w.setBase('http://localhost');
+    thr0w.setBase('http://192.168.1.2'); 
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
@@ -58,6 +59,12 @@
       function receive(data) {
         chart2015ShrimpUsaInVisible = data.chart2015ShrimpUsaInVisible;
         renderCharts();
+      }
+      function handleClick2015ShrimpUsaIn() {
+        chart2015ShrimpUsaInVisible = !chart2015ShrimpUsaInVisible;
+        renderCharts();
+        sync.update();
+        sync.idle(); 
       }
       function renderCharts() {
         if (chart2015ShrimpUsaInVisible) {
