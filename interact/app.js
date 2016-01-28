@@ -3,8 +3,8 @@
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
-    thr0w.setBase('http://localhost');
-// PROD   thr0w.setBase('http://192.168.1.2'); 
+// DEV    thr0w.setBase('http://localhost');
+    thr0w.setBase('http://192.168.1.2'); 
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
