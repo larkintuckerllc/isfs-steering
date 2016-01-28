@@ -3,17 +3,24 @@
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
-// DEV    thr0w.setBase('http://localhost');
-    thr0w.setBase('http://192.168.1.2'); 
+    thr0w.setBase('http://localhost');
+// PROD   thr0w.setBase('http://192.168.1.2'); 
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
-      var chart2015ShrimpUsaInVisible = false;
+      var INTERVAL = 100;
+      var RIGHT = 950;
+      var BOTTOM = 620;
+      var WIDTH = 400;
+      var HEIGHT = 311;
+      var shiftVertical = 0.5;
+      var shiftHorizontal = 0.5;
+      var left = 0;
+      var top = 0;
+      var frameEl = document.getElementById('my_frame');
       var svgEl = document.getElementById('my_svg');
-      var chart2015ShrimpUsaInEl = document.
-        getElementById('chart_2015_shrimp_usa_in');
       var grid = new thr0w.FlexGrid(
-        document.getElementById('my_frame'),
+        frameEl,
         document.getElementById('my_content'), [
           [0, 1, 2],
           [3, 4, 5],
@@ -41,37 +48,51 @@
           padding: 111
         }
         ]);
-      thr0w.svg.manage(grid, svgEl, 10);
       var sync = new thr0w.Sync(
         grid,
-        'charts',
+        'animation',
         message,
         receive
       );
-      document.getElementById('button_2015_shrimp_usa_in').
-        addEventListener('click', handleClick2015ShrimpUsaIn);
-      renderCharts();
+      frameEl.addEventListener('click', interact);
+      setSvgViewBox();
+      if (thr0w.getChannel() === 0) {
+        loop();
+      }
       function message() {
         return {
-          chart2015ShrimpUsaInVisible: chart2015ShrimpUsaInVisible
+          left: left,
+          top: top
         };
       }
       function receive(data) {
-        chart2015ShrimpUsaInVisible = data.chart2015ShrimpUsaInVisible;
-        renderCharts();
+        left = data.left;
+        top = data.top;
+        setSvgViewBox();
       }
-      function handleClick2015ShrimpUsaIn() {
-        chart2015ShrimpUsaInVisible = !chart2015ShrimpUsaInVisible;
-        renderCharts();
-        sync.update();
-        sync.idle(); 
+      function interact() {
+        window.location.href = 'interact/';
       }
-      function renderCharts() {
-        if (chart2015ShrimpUsaInVisible) {
-          chart2015ShrimpUsaInEl.style.display = 'inline';
+      function setSvgViewBox() {
+        svgEl.setAttribute('viewBox', left + ' ' + top +
+          ' ' + WIDTH + ' ' + HEIGHT);
+      }
+      function loop() {
+        if (left + WIDTH + shiftHorizontal <= RIGHT && 
+          left + shiftHorizontal >= 0) {
+          left += shiftHorizontal;
         } else {
-          chart2015ShrimpUsaInEl.style.display = 'none';
+          shiftHorizontal = shiftHorizontal * -1;
         }
+        if (top + HEIGHT + shiftVertical <= BOTTOM &&
+          top + shiftVertical >= 0) { 
+          top += shiftVertical;
+        } else {
+          shiftVertical = shiftVertical * -1;
+        }
+        setSvgViewBox();
+        sync.update(); 
+        window.setTimeout(loop, INTERVAL); 
       }
     }
     function messageCallback() {}
