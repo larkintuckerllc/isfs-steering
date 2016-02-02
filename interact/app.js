@@ -3,8 +3,8 @@
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
-// DEV    thr0w.setBase('http://localhost');
-    thr0w.setBase('http://192.168.1.2'); 
+    // thr0w.setBase('http://localhost'); // DEV
+    thr0w.setBase('http://192.168.1.2'); // PROD
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
@@ -21,15 +21,20 @@
           thr0w.getChannel()
         ]);
       thr0w.svg.manage(grid, svgEl, 10);
-      frameEl.addEventListener('click', keepActive);
+      frameEl.addEventListener('mousedown', keepActive);
+      frameEl.addEventListener('touchstart', keepActive);
       document.getElementById('button_2015_shrimp_usa_in').
-        addEventListener('click', handleClick2015ShrimpUsaIn);
+        addEventListener('mousedown', handleClick2015ShrimpUsaIn);
+      document.getElementById('button_2015_shrimp_usa_in').
+        addEventListener('touchstart', handleClick2015ShrimpUsaIn);
       renderCharts();
       checkIdle();
-      function keepActive() {
+      function keepActive(e) {
+        e.preventDefault();
         active = true;
       }
-      function handleClick2015ShrimpUsaIn() {
+      function handleClick2015ShrimpUsaIn(e) {
+        e.preventDefault();
         chart2015ShrimpUsaInVisible = !chart2015ShrimpUsaInVisible;
         renderCharts();
       }
@@ -45,7 +50,7 @@
           window.location.href = '../';
         }
         active = false;
-        window.setTimeout(checkIdle, INTERVAL); 
+        window.setTimeout(checkIdle, INTERVAL);
       }
     }
     function messageCallback() {}
