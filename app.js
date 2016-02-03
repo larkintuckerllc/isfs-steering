@@ -8,8 +8,14 @@
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
+      var TOUCH_SCREENS = [6, 7, 8, 9];
       var INTERVAL = 33;
       var COLOR_INTERVAL = 1000 * 60 * 20;
+      var HAND_ON = 1000 * 5;
+      var HAND_INTERVAL_BASE = 1000 * 10;
+      var HAND_INTERVAL_FLEX = 1000 * 10;
+      var HAND_HORIZONTAL = 730;
+      var HAND_VERTICAL = 1570;
       var RIGHT = 950;
       var BOTTOM = 620;
       var WIDTH = 400;
@@ -21,6 +27,7 @@
       var inverted = false;
       var frameEl = document.getElementById('my_frame');
       var svgEl = document.getElementById('my_svg');
+      var rightHandEl = document.getElementById('right_hand');
       var grid = new thr0w.FlexGrid(
         frameEl,
         document.getElementById('my_content'), [
@@ -56,6 +63,10 @@
         message,
         receive
       );
+      if (TOUCH_SCREENS.indexOf(thr0w.getChannel()) !== -1) {
+        rightHandEl.style.display = 'block';
+        loopHand();
+      }
       frameEl.addEventListener('mousedown', interact);
       frameEl.addEventListener('touchstart', interact);
       setSvgViewBox(left, top);
@@ -78,6 +89,20 @@
         if (inverted !== data.inverted) {
           setSvgColors(data.inverted);
           inverted = data.inverted;
+        }
+      }
+      function loopHand() {
+        var interval = HAND_INTERVAL_BASE + Math.floor(Math.random() *
+          HAND_INTERVAL_FLEX);
+        rightHandEl.style.left = Math.floor(Math.random() *
+          HAND_HORIZONTAL) + 'px';
+        rightHandEl.style.top = Math.floor(Math.random() *
+          HAND_VERTICAL) + 'px';
+        rightHandEl.style.opacity = 1;
+        window.setTimeout(hideHand, HAND_ON);
+        window.setTimeout(loopHand, interval);
+        function hideHand() {
+          rightHandEl.style.opacity = 0;
         }
       }
       function interact(e) {
