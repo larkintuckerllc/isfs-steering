@@ -9,7 +9,7 @@
       connectCallback, messageCallback);
     function connectCallback() {
       var INTERVAL = 33;
-      var COLOR_INTERVAL = 10000;
+      var COLOR_INTERVAL = 1000 * 60 * 20;
       var RIGHT = 950;
       var BOTTOM = 620;
       var WIDTH = 400;
