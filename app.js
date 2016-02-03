@@ -9,14 +9,16 @@
       connectCallback, messageCallback);
     function connectCallback() {
       var INTERVAL = 33;
+      var COLOR_INTERVAL = 10000;
       var RIGHT = 950;
       var BOTTOM = 620;
       var WIDTH = 400;
       var HEIGHT = 311;
-      var shiftVertical = 0.2;
-      var shiftHorizontal = 0.2;
+      var shiftVertical = 0.1;
+      var shiftHorizontal = 0.1;
       var left = 0;
       var top = 0;
+      var inverted = false;
       var frameEl = document.getElementById('my_frame');
       var svgEl = document.getElementById('my_svg');
       var grid = new thr0w.FlexGrid(
@@ -57,11 +59,14 @@
       frameEl.addEventListener('mousedown', interact);
       frameEl.addEventListener('touchstart', interact);
       setSvgViewBox(left, top);
+      setSvgColors(inverted);
       if (thr0w.getChannel() === 0) {
         loop();
+        loopColor();
       }
       function message() {
         return {
+          inverted: inverted,
           left: left,
           top: top
         };
@@ -70,6 +75,10 @@
         left = data.left;
         top = data.top;
         setSvgViewBox(left, top);
+        if (inverted !== data.inverted) {
+          setSvgColors(data.inverted);
+          inverted = data.inverted;
+        }
       }
       function interact(e) {
         e.preventDefault();
@@ -80,6 +89,18 @@
         function animation() {
           svgEl.setAttribute('viewBox', newLeft + ' ' + newTop +
            ' ' + WIDTH + ' ' + HEIGHT);
+        }
+      }
+      function setSvgColors(newInverted) {
+        var ORANGE = 'rgb(243,112,33)';
+        var BLUE = 'rgb(0,84,150)';
+        var fg = newInverted ? BLUE : ORANGE;
+        var bg = newInverted ? ORANGE : BLUE;
+        var i;
+        var fgElements = document.querySelectorAll('.my_svg__fg');
+        document.querySelector('.my_svg__bg').style.fill = bg;
+        for (i = 0; i < fgElements.length; i++) {
+          fgElements[i].style.fill = fg;
         }
       }
       function loop() {
@@ -98,6 +119,12 @@
         setSvgViewBox(left, top);
         sync.update();
         window.setTimeout(loop, INTERVAL);
+      }
+      function loopColor() {
+        inverted = !inverted;
+        setSvgColors(inverted);
+        sync.update();
+        window.setTimeout(loopColor, COLOR_INTERVAL);
       }
     }
     function messageCallback() {}
