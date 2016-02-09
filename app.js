@@ -60,11 +60,11 @@
         map2El.style.marginLeft = data.shift + 'px';
       }
       function loop() {
-        shift = shift < WIDTH - 2 ? shift + 3 : 0;
+        shift = shift < WIDTH ? shift + 1 : 0;
         map1El.style.marginLeft = shift + 'px';
         map2El.style.marginLeft = shift + 'px';
         sync.update();
-        window.setTimeout(loop, 50);
+        window.setTimeout(loop, 30);
       }
     }
   }
