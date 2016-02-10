@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   var INTERVAL = 33;
-  var SCREENSAVER_INTERVAL = 1000 * 60 * 2;
+  var SCREENSAVER_INTERVAL = 1000 * 60 * 20;
   var TOUCH_SCREENS = [6, 7, 8, 9];
   var WIDTH = 8000;
   var HAND_ON = 1000 * 5;
