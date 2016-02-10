@@ -32,3 +32,34 @@ html, body {
   width: 8001px;
   left: -8000px;
 }
+#right_hand {
+  background-image: url("right_hand.png");
+}
+#left_hand {
+  background-image: url("left_hand.png");
+}
+.hand {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  width: 400px;
+  height: 400px;
+  left: 0px;
+  top: 0px;
+  background-size: cover;
+  transition: opacity 2s;
+}
+#screensaver {
+  position: absolute;
+  z-index: 1000;
+  left: 0%;
+  top: 0px;
+  width: 16px;
+  height: 100%;
+  font-size: 0px;
+}
+.screensaver__beam {
+  display: inline-block;
+  width: 2px;
+  height: 100%;
+}
