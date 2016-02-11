@@ -8,11 +8,80 @@
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
+      var TOP = 600;
+      var LEFT = 0;
+      var COUNTRIES = [
+        {
+          x: 672,
+          y: 806,
+          fill: 'rgba(255,0,0,0.3)',
+          percent: 0.21 // INDIA
+        },
+        {
+          x: 230,
+          y: 885,
+          fill: 'rgba(0,255,0,0.3)',
+          percent: 0.12 // ECUADOR
+        },
+        {
+          x: 209,
+          y: 774,
+          fill: 'rgba(0,0,255,0.3)',
+          percent: 0.12 // USA
+        },
+        {
+          x: 734,
+          y: 830,
+          fill: 'rgba(128,128,0,0.3)',
+          percent: 0.11 // THAILAND
+        },
+        {
+          x: 755,
+          y: 837,
+          fill: 'rgba(128,0,128,0.3)',
+          percent: 0.07 // VIETNAM
+        },
+        {
+          x: 788,
+          y: 883,
+          fill: 'rgba(0,128,128,0.3)',
+          percent: 0.07 // INDONESIA
+        },
+        {
+          x: 172,
+          y: 813,
+          fill: 'rgba(255,128,0,0.3)',
+          percent: 0.06 // MEXICO
+        },
+        {
+          x: 753,
+          y: 786,
+          fill: 'rgba(255,0,128,0.3)',
+          percent: 0.04 // CHINA
+        },
+        {
+          x: 755,
+          y: 885,
+          fill: 'rgba(255,128,0,0.3)',
+          percent: 0.02 // MALAYSIA
+        },
+        {
+          x: 238,
+          y: 909,
+          fill: 'rgba(0,128,255,0.3)',
+          percent: 0.02 // PERU
+        },
+        {
+          x: 0,
+          y: 0,
+          fill: 'rgba(128,128,128,0.3)',
+          percent: 0.16 // REMAINING
+        }
+      ];
       var SVG_NS = 'http://www.w3.org/2000/svg';
       var INTERVAL = 1000 * 60;
       var BG = '#bfbfbf';
       var FG = '#888888';
-      var CIRCLE = 'rgba(255,85,85,0.5)';
       var active = true;
       var chartVisible = false;
       var frameEl = document.getElementById('my_frame');
@@ -69,19 +138,47 @@
         renderCharts();
       }
       function renderCharts() {
+        var i;
+        var y = TOP;
+        var rectEl;
+        var height;
+        var top;
+        var left;
+        var bottom;
+        var triangleEl;
+        var circleEl;
+        var movement;
         if (chartVisible) {
           groupEl = document.createElementNS(SVG_NS, 'g');
-          groupEl.setAttribute('fill', CIRCLE);
-          groupEl.appendChild(createCircle(672, 806, getRadius(0.21))); // INDIA
-          groupEl.appendChild(createCircle(230, 885, getRadius(0.12))); // ECUADOR
-          groupEl.appendChild(createCircle(755, 837, getRadius(0.07))); // VIETNAM
-          groupEl.appendChild(createCircle(734, 830, getRadius(0.11))); // THAILAND
-          groupEl.appendChild(createCircle(753, 786, getRadius(0.04))); // CHINA
-          groupEl.appendChild(createCircle(172, 813, getRadius(0.06))); // MEXICO
-          groupEl.appendChild(createCircle(788, 883, getRadius(0.07))); // VIETNAM
-          groupEl.appendChild(createCircle(755, 885, getRadius(0.02))); // MALAYSIA
-          groupEl.appendChild(createCircle(238, 909, getRadius(0.02))); // PERU
-          groupEl.appendChild(createCircle(209, 774, getRadius(0.12))); // USA
+          for (i = 0; i < COUNTRIES.length; i++) {
+            top = y;
+            height = 300 * COUNTRIES[i].percent;
+            rectEl = document.createElementNS(SVG_NS, 'rect');
+            rectEl.setAttribute('x', LEFT);
+            rectEl.setAttribute('y', y);
+            rectEl.setAttribute('width', 100);
+            rectEl.setAttribute('height', height);
+            rectEl.setAttribute('fill', COUNTRIES[i].fill);
+            groupEl.appendChild(rectEl);
+            y += height;
+            bottom = y;
+            if (COUNTRIES[i].x !== 0) {
+              left = COUNTRIES[i].x < LEFT ? LEFT : LEFT + 100;
+              movement = 'M' + left + ' ' + top +
+                ' L' + COUNTRIES[i].x + ' ' + COUNTRIES[i].y +
+                ' L' + left + ' ' + bottom + ' Z';
+              triangleEl = document.createElementNS(SVG_NS, 'path');
+              triangleEl.setAttribute('d', movement);
+              triangleEl.setAttribute('fill', COUNTRIES[i].fill);
+              groupEl.appendChild(triangleEl);
+              circleEl = document.createElementNS(SVG_NS, 'circle');
+              circleEl.setAttribute('cx', COUNTRIES[i].x);
+              circleEl.setAttribute('cy', COUNTRIES[i].y);
+              circleEl.setAttribute('r', 5);
+              circleEl.setAttribute('fill', COUNTRIES[i].fill);
+              groupEl.appendChild(circleEl);
+            }
+          }
           backgroundEl.appendChild(groupEl);
           indiaEl.style.fill = FG;
           ecuadorEl.style.fill = FG;
@@ -147,16 +244,6 @@
         }
         active = false;
         window.setTimeout(checkIdle, INTERVAL);
-      }
-      function getRadius(percent) {
-        return Math.floor(Math.sqrt(percent * 31415 / 3.1415));
-      }
-      function createCircle(x, y, r) {
-        var circleEl = document.createElementNS(SVG_NS, 'circle');
-        circleEl.setAttribute('cx', x);
-        circleEl.setAttribute('cy', y);
-        circleEl.setAttribute('r', r);
-        return circleEl;
       }
     }
     function messageCallback() {}
