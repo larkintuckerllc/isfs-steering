@@ -10,11 +10,12 @@
   var HAND_HORIZONTAL = 1080 - 400;
   var HAND_VERTICAL = 1920 - 400;
   var thr0w = window.thr0w;
+  var frameEl = document.getElementById('my_frame');
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
     // thr0w.setBase('http://localhost'); // DEV
     thr0w.setBase('http://192.168.1.2'); // PROD
-    thr0w.addAdminTools(document.getElementById('my_frame'),
+    thr0w.addAdminTools(frameEl,
       connectCallback, messageCallback);
     function connectCallback() {
       var shift = 0;
@@ -25,7 +26,7 @@
       var leftHandEl = document.getElementById('left_hand');
       var screensaverEl = document.getElementById('screensaver');
       var grid = new thr0w.FlexGrid(
-        document.getElementById('my_frame'),
+        frameEl,
         document.getElementById('my_content'), [
           [0, 1, 2],
           [3, 4, 5],
@@ -77,6 +78,8 @@
         rightHandEl.style.display = 'block';
         loopHand();
       }
+      frameEl.addEventListener('mousedown', interact);
+      frameEl.addEventListener('touchstart', interact);
       function message() {
         return {
           shift: shift
@@ -120,6 +123,10 @@
         loopScreensaver();
         window.setTimeout(startScreensaver, SCREENSAVER_INTERVAL);
       }
+      function interact(e) {
+        e.preventDefault();
+        window.location.href = 'interact/';
+      }
       function loopScreensaver() {
         screensaverShift = screensaverShift < width - 1 ?
           screensaverShift + 2 : -16;
@@ -129,6 +136,7 @@
           window.setTimeout(loopScreensaver, INTERVAL);
         }
       }
+
     }
   }
   function messageCallback() {}
