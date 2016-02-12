@@ -1,21 +1,8 @@
 (function() {
   'use strict';
-  var c3 = window.c3;
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
-    c3.generate({
-      data: {
-        columns: [
-          ['India', 0.21],
-          ['Ecuador', 0.12],
-        ],
-        type: 'pie'
-      },
-      color: {
-        pattern: ['rgba(255,0,0,0.3)', 'rgba(0,255,0,0.3)']
-      }
-    });
     // thr0w.setBase('http://localhost'); // DEV
     thr0w.setBase('http://192.168.1.2'); // PROD
     thr0w.addAdminTools(document.getElementById('my_frame'),
@@ -104,6 +91,7 @@
       var INTERVAL = 1000 * 60;
       var BG = '#bfbfbf';
       var FG = '#888888';
+      var windowOpen = false;
       var active = true;
       var chartVisible = false;
       var frameEl = document.getElementById('my_frame');
@@ -142,6 +130,9 @@
         document.getElementById('my_content'), [
           thr0w.getChannel()
         ]);
+      var wm = new thr0w.windows.WindowManager('my_wm', grid);
+      document.addEventListener('thr0w_windows_close_window',
+        windowCloseCallback);
       thr0w.svg.manage(grid, svgEl, 10);
       frameEl.addEventListener('mousedown', keepActive);
       frameEl.addEventListener('touchstart', keepActive);
@@ -174,6 +165,8 @@
         var curveEl;
         var circleEl;
         if (chartVisible) {
+          windowOpen = true;
+          wm.openWindow('usa', 100, 1420, 400, 400, 'chart.html');
           groupEl = document.createElementNS(SVG_NS, 'g');
           for (i = 0; i < COUNTRIES.length; i++) {
             if (COUNTRIES[i].x !== 0) {
@@ -238,6 +231,10 @@
           hawaii2El.style.fill = FG;
           hawaii3El.style.fill = FG;
         } else {
+          if (windowOpen) {
+            wm.closeWindow('usa');
+            windowOpen = false;
+          }
           backgroundEl.removeChild(groupEl);
           indiaEl.style.fill = BG;
           ecuadorEl.style.fill = BG;
@@ -274,6 +271,9 @@
         }
         active = false;
         window.setTimeout(checkIdle, INTERVAL);
+      }
+      function windowCloseCallback() {
+        windowOpen = false;
       }
     }
     function messageCallback() {}
