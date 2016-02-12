@@ -68,15 +68,15 @@
         {
           x: 755,
           y: 885,
-          fill: 'rgba(255,128,0,1)',
-          line: 'rgba(255,128,0,0.3)',
+          fill: 'rgba(128,255,0,1)',
+          line: 'rgba(128,255,0,0.3)',
           percent: 0.02 // MALAYSIA
         },
         {
           x: 238,
           y: 909,
-          fill: 'rgba(0,128,255,1)',
-          line: 'rgba(0,128,255,0.3)',
+          fill: 'rgba(0,255,128,1)',
+          line: 'rgba(0,255,128,0.3)',
           percent: 0.02 // PERU
         },
         {
@@ -131,6 +131,7 @@
           thr0w.getChannel()
         ]);
       var wm = new thr0w.windows.WindowManager('my_wm', grid);
+      thr0w.draw.load(grid);
       document.addEventListener('thr0w_windows_close_window',
         windowCloseCallback);
       thr0w.svg.manage(grid, svgEl, 10);
@@ -166,7 +167,7 @@
         var circleEl;
         if (chartVisible) {
           windowOpen = true;
-          wm.openWindow('usa', 100, 1420, 400, 400, 'chart.html');
+          wm.openWindow('usa', 100, 1420, 400, 450, 'chart.html');
           groupEl = document.createElementNS(SVG_NS, 'g');
           for (i = 0; i < COUNTRIES.length; i++) {
             if (COUNTRIES[i].x !== 0) {
