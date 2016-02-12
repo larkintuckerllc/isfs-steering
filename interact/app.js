@@ -1,8 +1,21 @@
 (function() {
   'use strict';
+  var c3 = window.c3;
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
+    c3.generate({
+      data: {
+        columns: [
+          ['India', 0.21],
+          ['Ecuador', 0.12],
+        ],
+        type: 'pie'
+      },
+      color: {
+        pattern: ['rgba(255,0,0,0.3)', 'rgba(0,255,0,0.3)']
+      }
+    });
     // thr0w.setBase('http://localhost'); // DEV
     thr0w.setBase('http://192.168.1.2'); // PROD
     thr0w.addAdminTools(document.getElementById('my_frame'),
@@ -171,18 +184,6 @@
               nAngle = Math.PI / 2 - dAngle;
               nx = dl * Math.cos(nAngle);
               ny = dl * Math.sin(nAngle);
-              /*
-              cx = COUNTRIES[i].x - 190 >= 0 ? 190 + dx :
-                190 - dx;
-              cy = COUNTRIES[i].y - 740 >= 0 ? 740 + dy :
-                740 - dy;
-              cx = (COUNTRIES[i].x - 190) * (COUNTRIES[i].y - 740) >= 0 ?
-                cx + nx : cx - nx;
-              cy = cy - ny;
-              movement = 'M' + 190 + ' ' + 740 +
-                ' Q' + cx + ' ' + cy + ' ' +
-                COUNTRIES[i].x + ' ' + COUNTRIES[i].y;
-              */
               cx = 190 - COUNTRIES[i].x >= 0 ? COUNTRIES[i].x + dx :
                 COUNTRIES[i].x - dx;
               cy = 740 - COUNTRIES[i].y >= 0 ? COUNTRIES[i].y + dy :

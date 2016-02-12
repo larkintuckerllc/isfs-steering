@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>ISFS Steering Interact</title>
+  <link rel="stylesheet" type="text/css" href="../bower_components/c3/c3.css">
   <link rel="stylesheet" type="text/css" href="/client/css/thr0w-base.css">
   <link rel="stylesheet" type="text/css" href="/client/css/thr0w-svg.css">
   <link rel="stylesheet" type="text/css" href="app.css">
@@ -1847,9 +1848,13 @@
     </g>
   </g>
 </svg>
-
+      <div id="chart_frame">
+        <div id="chart"></div>
+      </div>
     </div>
   </div>
+  <script src="../bower_components/d3/d3.min.js"></script>
+  <script src="../bower_components/c3/c3.min.js"></script>
 <!-- DEV / PROD
   <script src="http://localhost:3001/socket.io/socket.io.js"></script>
 -->
