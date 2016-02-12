@@ -8,73 +8,82 @@
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
-      var TOP = 600;
-      var LEFT = 0;
       var COUNTRIES = [
         {
           x: 672,
           y: 806,
-          fill: 'rgba(255,0,0,0.3)',
+          fill: 'rgba(255,0,0,1)',
+          line: 'rgba(255,0,0,0.3)',
           percent: 0.21 // INDIA
         },
         {
           x: 230,
           y: 885,
-          fill: 'rgba(0,255,0,0.3)',
+          fill: 'rgba(0,255,0,1)',
+          line: 'rgba(0,255,0,0.3)',
           percent: 0.12 // ECUADOR
         },
         {
           x: 209,
           y: 774,
-          fill: 'rgba(0,0,255,0.3)',
+          fill: 'rgba(0,0,255,1)',
+          line: 'rgba(0,0,255,0.3)',
           percent: 0.12 // USA
         },
         {
           x: 734,
           y: 830,
-          fill: 'rgba(128,128,0,0.3)',
+          fill: 'rgba(128,128,0,1)',
+          line: 'rgba(128,128,0,0.3)',
           percent: 0.11 // THAILAND
         },
         {
           x: 755,
           y: 837,
-          fill: 'rgba(128,0,128,0.3)',
+          fill: 'rgba(128,0,128,1)',
+          line: 'rgba(128,0,128,0.3)',
           percent: 0.07 // VIETNAM
         },
         {
           x: 788,
           y: 883,
-          fill: 'rgba(0,128,128,0.3)',
+          fill: 'rgba(0,128,128,1)',
+          line: 'rgba(0,128,128,0.3)',
           percent: 0.07 // INDONESIA
         },
         {
           x: 172,
           y: 813,
-          fill: 'rgba(255,128,0,0.3)',
+          fill: 'rgba(255,128,0,1)',
+          line: 'rgba(255,128,0,0.3)',
           percent: 0.06 // MEXICO
         },
         {
           x: 753,
           y: 786,
-          fill: 'rgba(255,0,128,0.3)',
+          fill: 'rgba(255,0,128,1)',
+          line: 'rgba(255,0,128,0.3)',
           percent: 0.04 // CHINA
         },
         {
           x: 755,
           y: 885,
-          fill: 'rgba(255,128,0,0.3)',
+          fill: 'rgba(255,128,0,1)',
+          line: 'rgba(255,128,0,0.3)',
           percent: 0.02 // MALAYSIA
         },
         {
           x: 238,
           y: 909,
-          fill: 'rgba(0,128,255,0.3)',
+          fill: 'rgba(0,128,255,1)',
+          line: 'rgba(0,128,255,0.3)',
           percent: 0.02 // PERU
         },
         {
           x: 0,
           y: 0,
-          fill: 'rgba(128,128,128,0.3)',
+          fill: 'rgba(128,128,128,1)',
+          line: 'rgba(128,128,128,0.3)',
           percent: 0.16 // REMAINING
         }
       ];
@@ -139,42 +148,62 @@
       }
       function renderCharts() {
         var i;
-        var y = TOP;
-        var rectEl;
-        var height;
-        var top;
-        var left;
-        var bottom;
-        var triangleEl;
-        var circleEl;
+        var dx;
+        var dy;
+        var dl;
+        var dAngle;
+        var nAngle;
+        var nx;
+        var ny;
+        var cx;
+        var cy;
         var movement;
+        var curveEl;
+        var circleEl;
         if (chartVisible) {
           groupEl = document.createElementNS(SVG_NS, 'g');
           for (i = 0; i < COUNTRIES.length; i++) {
-            top = y;
-            height = 300 * COUNTRIES[i].percent;
-            rectEl = document.createElementNS(SVG_NS, 'rect');
-            rectEl.setAttribute('x', LEFT);
-            rectEl.setAttribute('y', y);
-            rectEl.setAttribute('width', 100);
-            rectEl.setAttribute('height', height);
-            rectEl.setAttribute('fill', COUNTRIES[i].fill);
-            groupEl.appendChild(rectEl);
-            y += height;
-            bottom = y;
             if (COUNTRIES[i].x !== 0) {
-              left = COUNTRIES[i].x < LEFT ? LEFT : LEFT + 100;
-              movement = 'M' + left + ' ' + top +
-                ' L' + COUNTRIES[i].x + ' ' + COUNTRIES[i].y +
-                ' L' + left + ' ' + bottom + ' Z';
-              triangleEl = document.createElementNS(SVG_NS, 'path');
-              triangleEl.setAttribute('d', movement);
-              triangleEl.setAttribute('fill', COUNTRIES[i].fill);
-              groupEl.appendChild(triangleEl);
+              dx = Math.abs((COUNTRIES[i].x - 190) / 2);
+              dy = Math.abs((COUNTRIES[i].y - 740) / 2);
+              dl = Math.sqrt(dx * dx + dy * dy);
+              dAngle = Math.atan(dy / dx);
+              nAngle = Math.PI / 2 - dAngle;
+              nx = dl * Math.cos(nAngle);
+              ny = dl * Math.sin(nAngle);
+              /*
+              cx = COUNTRIES[i].x - 190 >= 0 ? 190 + dx :
+                190 - dx;
+              cy = COUNTRIES[i].y - 740 >= 0 ? 740 + dy :
+                740 - dy;
+              cx = (COUNTRIES[i].x - 190) * (COUNTRIES[i].y - 740) >= 0 ?
+                cx + nx : cx - nx;
+              cy = cy - ny;
+              movement = 'M' + 190 + ' ' + 740 +
+                ' Q' + cx + ' ' + cy + ' ' +
+                COUNTRIES[i].x + ' ' + COUNTRIES[i].y;
+              */
+              cx = 190 - COUNTRIES[i].x >= 0 ? COUNTRIES[i].x + dx :
+                COUNTRIES[i].x - dx;
+              cy = 740 - COUNTRIES[i].y >= 0 ? COUNTRIES[i].y + dy :
+                COUNTRIES[i].y - dy;
+              cx = (190 - COUNTRIES[i].x) * (740 - COUNTRIES[i].y) >= 0 ?
+                cx + nx : cx - nx;
+              cy = cy - ny;
+              movement = 'M' + COUNTRIES[i].x + ' ' + COUNTRIES[i].y +
+                ' Q' + cx + ' ' + cy + ' ' +
+                190 + ' ' + 740;
+              curveEl = document.createElementNS(SVG_NS, 'path');
+              curveEl.setAttribute('d', movement);
+              curveEl.setAttribute('stroke', COUNTRIES[i].line);
+              curveEl.setAttribute('stroke-width', 10);
+              curveEl.setAttribute('fill', 'none');
+              curveEl.classList.add('curve');
+              groupEl.appendChild(curveEl);
               circleEl = document.createElementNS(SVG_NS, 'circle');
               circleEl.setAttribute('cx', COUNTRIES[i].x);
               circleEl.setAttribute('cy', COUNTRIES[i].y);
-              circleEl.setAttribute('r', 5);
+              circleEl.setAttribute('r', 8);
               circleEl.setAttribute('fill', COUNTRIES[i].fill);
               groupEl.appendChild(circleEl);
             }
