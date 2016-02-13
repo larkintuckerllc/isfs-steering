@@ -3,11 +3,48 @@
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
-    // thr0w.setBase('http://localhost'); // DEV
-    thr0w.setBase('http://192.168.1.2'); // PROD
+    thr0w.setBase('http://localhost'); // DEV
+    // thr0w.setBase('http://192.168.1.2'); // PROD
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
+      var COUNTRIES2 = [
+        {
+          x: 219,
+          y: 734,
+          fill: 'rgba(255,0,0,1)',
+          line: 'rgba(255,0,0,0.3)',
+          percent: 1 // USA
+        },
+        {
+          x: 815,
+          y: 750,
+          fill: 'rgba(0,255,0,1)',
+          line: 'rgba(0,255,0,0.3)',
+          percent: 1 // JAPAN
+        },
+        {
+          x: 753,
+          y: 786,
+          fill: 'rgba(0,0,255,1)',
+          line: 'rgba(0,0,255,0.3)',
+          percent: 1 // CHINA
+        },
+        {
+          x: 795,
+          y: 745,
+          fill: 'rgba(128,128,0,1)',
+          line: 'rgba(128,128,0,0.3)',
+          percent: 1 // SOUTH KOREA
+        },
+        {
+          x: 840,
+          y: 1000,
+          fill: 'rgba(128,0,128,1)',
+          line: 'rgba(128,0,128,0.3)',
+          percent: 1 // AUSTRALIA
+        },
+      ];
       var COUNTRIES = [
         {
           x: 672,
@@ -38,6 +75,7 @@
           percent: 0.11 // THAILAND
         },
         {
+          id: 'vietnam',
           x: 755,
           y: 837,
           fill: 'rgba(128,0,128,1)',
@@ -94,6 +132,7 @@
       var windowOpen = false;
       var active = true;
       var chartVisible = false;
+      var chart2Visible = false;
       var frameEl = document.getElementById('my_frame');
       var svgEl = document.getElementById('my_svg');
       var backgroundEl = document.getElementById('background');
@@ -124,6 +163,15 @@
       var hawaii1El = document.getElementById('path13645');
       var hawaii2El = document.getElementById('path13643');
       var hawaii3El = document.getElementById('path13641');
+      var hokkaidoEl = document.getElementById('hokkaido');
+      var honshuEl = document.getElementById('honshu');
+      var kyushuEl = document.getElementById('kyushu');
+      var shikokuEl = document.getElementById('shikoku');
+      var southKoreaEl = document.getElementById('south korea');
+      var australiaEl = document.getElementById('australia');
+      var tasmaniaEl = document.getElementById('tasmania');
+      var germanyEl = document.getElementById('germany');
+      var franceEl = document.getElementById('france');
       var groupEl;
       var grid = new thr0w.Grid(
         frameEl,
@@ -141,6 +189,10 @@
         addEventListener('mousedown', toggleShrimp);
       document.getElementById('shrimp').
         addEventListener('touchstart', toggleShrimp);
+      document.getElementById('shrimp2').
+        addEventListener('mousedown', toggleVietnam);
+      document.getElementById('shrimp2').
+        addEventListener('touchstart', toggleVietnam);
       checkIdle();
       function keepActive(e) {
         e.preventDefault();
@@ -148,123 +200,199 @@
       }
       function toggleShrimp(e) {
         e.preventDefault();
-        chartVisible = !chartVisible;
-        renderCharts();
-      }
-      function renderCharts() {
-        var i;
-        var dx;
-        var dy;
-        var dl;
-        var dAngle;
-        var nAngle;
-        var nx;
-        var ny;
-        var cx;
-        var cy;
-        var movement;
-        var curveEl;
-        var circleEl;
-        if (chartVisible) {
-          windowOpen = true;
-          wm.openWindow('usa', 100, 1420, 400, 450, 'chart.html');
-          groupEl = document.createElementNS(SVG_NS, 'g');
-          for (i = 0; i < COUNTRIES.length; i++) {
-            if (COUNTRIES[i].x !== 0) {
-              dx = Math.abs((COUNTRIES[i].x - 190) / 2);
-              dy = Math.abs((COUNTRIES[i].y - 740) / 2);
-              dl = Math.sqrt(dx * dx + dy * dy);
-              dAngle = Math.atan(dy / dx);
-              nAngle = Math.PI / 2 - dAngle;
-              nx = dl * Math.cos(nAngle);
-              ny = dl * Math.sin(nAngle);
-              cx = 190 - COUNTRIES[i].x >= 0 ? COUNTRIES[i].x + dx :
-                COUNTRIES[i].x - dx;
-              cy = 740 - COUNTRIES[i].y >= 0 ? COUNTRIES[i].y + dy :
-                COUNTRIES[i].y - dy;
-              cx = (190 - COUNTRIES[i].x) * (740 - COUNTRIES[i].y) >= 0 ?
-                cx + nx : cx - nx;
-              cy = cy - ny;
-              movement = 'M' + COUNTRIES[i].x + ' ' + COUNTRIES[i].y +
-                ' Q' + cx + ' ' + cy + ' ' +
-                190 + ' ' + 740;
-              curveEl = document.createElementNS(SVG_NS, 'path');
-              curveEl.setAttribute('d', movement);
-              curveEl.setAttribute('stroke', COUNTRIES[i].line);
-              curveEl.setAttribute('stroke-width', 10);
-              curveEl.setAttribute('fill', 'none');
-              curveEl.classList.add('curve');
-              groupEl.appendChild(curveEl);
-              circleEl = document.createElementNS(SVG_NS, 'circle');
-              circleEl.setAttribute('cx', COUNTRIES[i].x);
-              circleEl.setAttribute('cy', COUNTRIES[i].y);
-              circleEl.setAttribute('r', 8);
-              circleEl.setAttribute('fill', COUNTRIES[i].fill);
-              groupEl.appendChild(circleEl);
-            }
-          }
-          backgroundEl.appendChild(groupEl);
-          indiaEl.style.fill = FG;
-          ecuadorEl.style.fill = FG;
-          vietnamEl.style.fill = FG;
-          thailandEl.style.fill = FG;
-          chinaEl.style.fill = FG;
-          mexicoEl.style.fill = FG;
-          malaysiaEl.style.fill = FG;
-          eastMalaysiaEl.style.fill = FG;
-          peruEl.style.fill = FG;
-          sumatraEl.style.fill = FG;
-          kalimantanEl.style.fill = FG;
-          sulawesiEl.style.fill = FG;
-          malukuEl.style.fill = FG;
-          irianJayaEl.style.fill = FG;
-          seramEl.style.fill = FG;
-          javaEl.style.fill = FG;
-          baliEl.style.fill = FG;
-          lombokEl.style.fill = FG;
-          sumbaEl.style.fill = FG;
-          floresEl.style.fill = FG;
-          timorEl.style.fill = FG;
-          usaEl.style.fill = FG;
-          alaskaEl.style.fill = FG;
-          hawaiiEl.style.fill = FG;
-          hawaii1El.style.fill = FG;
-          hawaii2El.style.fill = FG;
-          hawaii3El.style.fill = FG;
-        } else {
-          if (windowOpen) {
-            wm.closeWindow('usa');
-            windowOpen = false;
-          }
-          backgroundEl.removeChild(groupEl);
-          indiaEl.style.fill = BG;
-          ecuadorEl.style.fill = BG;
-          vietnamEl.style.fill = BG;
-          thailandEl.style.fill = BG;
-          chinaEl.style.fill = BG;
-          mexicoEl.style.fill = BG;
-          malaysiaEl.style.fill = BG;
-          peruEl.style.fill = BG;
-          eastMalaysiaEl.style.fill = BG;
-          sumatraEl.style.fill = BG;
-          kalimantanEl.style.fill = BG;
-          sulawesiEl.style.fill = BG;
-          malukuEl.style.fill = BG;
-          irianJayaEl.style.fill = BG;
-          seramEl.style.fill = BG;
-          javaEl.style.fill = BG;
-          baliEl.style.fill = BG;
-          lombokEl.style.fill = BG;
-          sumbaEl.style.fill = BG;
-          floresEl.style.fill = BG;
-          timorEl.style.fill = BG;
-          usaEl.style.fill = BG;
-          alaskaEl.style.fill = BG;
-          hawaiiEl.style.fill = BG;
-          hawaii1El.style.fill = BG;
-          hawaii2El.style.fill = BG;
-          hawaii3El.style.fill = BG;
+        if (chart2Visible) {
+          hideVietnam();
         }
+        if (chartVisible) {
+          hideUSA();
+        } else {
+          showUSA();
+        }
+      }
+      function toggleVietnam(e) {
+        e.preventDefault();
+        if (chartVisible) {
+          hideUSA();
+        }
+        if (chart2Visible) {
+          hideVietnam();
+        } else {
+          showVietnam();
+        }
+      }
+      function hideUSA() {
+        chartVisible = false;
+        if (windowOpen) {
+          wm.closeWindow('usa');
+          windowOpen = false;
+        }
+        backgroundEl.removeChild(groupEl);
+        indiaEl.style.fill = BG;
+        ecuadorEl.style.fill = BG;
+        vietnamEl.style.fill = BG;
+        thailandEl.style.fill = BG;
+        chinaEl.style.fill = BG;
+        mexicoEl.style.fill = BG;
+        malaysiaEl.style.fill = BG;
+        peruEl.style.fill = BG;
+        eastMalaysiaEl.style.fill = BG;
+        sumatraEl.style.fill = BG;
+        kalimantanEl.style.fill = BG;
+        sulawesiEl.style.fill = BG;
+        malukuEl.style.fill = BG;
+        irianJayaEl.style.fill = BG;
+        seramEl.style.fill = BG;
+        javaEl.style.fill = BG;
+        baliEl.style.fill = BG;
+        lombokEl.style.fill = BG;
+        sumbaEl.style.fill = BG;
+        floresEl.style.fill = BG;
+        timorEl.style.fill = BG;
+        usaEl.style.fill = BG;
+        alaskaEl.style.fill = BG;
+        hawaiiEl.style.fill = BG;
+        hawaii1El.style.fill = BG;
+        hawaii2El.style.fill = BG;
+        hawaii3El.style.fill = BG;
+      }
+      function showVietnam() {
+        var i;
+        var circleEl;
+        chart2Visible = true;
+        groupEl = document.createElementNS(SVG_NS, 'g');
+        for (i = 0; i < COUNTRIES2.length; i++) {
+          if (COUNTRIES[i].x !== 0) {
+            groupEl.appendChild(createArc(
+              750,
+              823,
+              COUNTRIES2[i].x,
+              COUNTRIES2[i].y,
+              COUNTRIES2[i].line
+            ));
+            circleEl = document.createElementNS(SVG_NS, 'circle');
+            circleEl.setAttribute('cx', COUNTRIES2[i].x);
+            circleEl.setAttribute('cy', COUNTRIES2[i].y);
+            circleEl.setAttribute('r', 8);
+            circleEl.setAttribute('fill', COUNTRIES2[i].fill);
+            groupEl.appendChild(circleEl);
+          }
+        }
+        backgroundEl.appendChild(groupEl);
+        usaEl.style.fill = FG;
+        alaskaEl.style.fill = FG;
+        hawaiiEl.style.fill = FG;
+        hawaii1El.style.fill = FG;
+        hawaii2El.style.fill = FG;
+        hawaii3El.style.fill = FG;
+        hokkaidoEl.style.fill = FG;
+        honshuEl.style.fill = FG;
+        kyushuEl.style.fill = FG;
+        shikokuEl.style.fill = FG;
+        southKoreaEl.style.fill = FG;
+        australiaEl.style.fill = FG;
+        tasmaniaEl.style.fill = FG;
+        germanyEl.style.fill = FG;
+        franceEl.style.fill = FG;
+        chinaEl.style.fill = FG;
+      }
+      function hideVietnam() {
+        chart2Visible = false;
+        backgroundEl.removeChild(groupEl);
+        usaEl.style.fill = BG;
+        alaskaEl.style.fill = BG;
+        hawaiiEl.style.fill = BG;
+        hawaii1El.style.fill = BG;
+        hawaii2El.style.fill = BG;
+        hawaii3El.style.fill = BG;
+        hokkaidoEl.style.fill = BG;
+        honshuEl.style.fill = BG;
+        kyushuEl.style.fill = BG;
+        shikokuEl.style.fill = BG;
+        southKoreaEl.style.fill = BG;
+        australiaEl.style.fill = BG;
+        tasmaniaEl.style.fill = BG;
+        germanyEl.style.fill = BG;
+        franceEl.style.fill = BG;
+        chinaEl.style.fill = BG;
+      }
+      function createArc(sx, sy, ex, ey, color) {
+        var dx = Math.abs((sx - ex) / 2);
+        var dy = Math.abs((sy - ey) / 2);
+        var dl = Math.sqrt(dx * dx + dy * dy);
+        var dAngle = Math.atan(dy / dx);
+        var nAngle = Math.PI / 2 - dAngle;
+        var nx = dl * Math.cos(nAngle);
+        var ny = dl * Math.sin(nAngle);
+        var cx = ex - sx >= 0 ? sx + dx :
+          sx - dx;
+        var cy = ey - sy >= 0 ? sy + dy :
+          sy - dy;
+        cx = (ex - sx) * (ex - sy) >= 0 ?
+          cx + nx : cx - nx;
+        cy = cy - ny;
+        var movement = 'M' + sx + ' ' + sy +
+          ' Q' + cx + ' ' + cy + ' ' +
+          ex + ' ' + ey;
+        var curveEl = document.createElementNS(SVG_NS, 'path');
+        curveEl.setAttribute('d', movement);
+        curveEl.setAttribute('stroke', color);
+        curveEl.setAttribute('stroke-width', 10);
+        curveEl.setAttribute('fill', 'none');
+        curveEl.classList.add('curve');
+        return curveEl;
+      }
+      function showUSA() {
+        var i;
+        var circleEl;
+        chartVisible = true;
+        windowOpen = true;
+        wm.openWindow('usa', 100, 1420, 400, 450, 'chart.html');
+        groupEl = document.createElementNS(SVG_NS, 'g');
+        for (i = 0; i < COUNTRIES.length; i++) {
+          if (COUNTRIES[i].x !== 0) {
+            groupEl.appendChild(createArc(
+              COUNTRIES[i].x,
+              COUNTRIES[i].y,
+              190,
+              740,
+              COUNTRIES[i].line
+            ));
+            circleEl = document.createElementNS(SVG_NS, 'circle');
+            circleEl.setAttribute('cx', COUNTRIES[i].x);
+            circleEl.setAttribute('cy', COUNTRIES[i].y);
+            circleEl.setAttribute('r', 8);
+            circleEl.setAttribute('fill', COUNTRIES[i].fill);
+            groupEl.appendChild(circleEl);
+          }
+        }
+        backgroundEl.appendChild(groupEl);
+        indiaEl.style.fill = FG;
+        ecuadorEl.style.fill = FG;
+        vietnamEl.style.fill = FG;
+        thailandEl.style.fill = FG;
+        chinaEl.style.fill = FG;
+        mexicoEl.style.fill = FG;
+        malaysiaEl.style.fill = FG;
+        eastMalaysiaEl.style.fill = FG;
+        peruEl.style.fill = FG;
+        sumatraEl.style.fill = FG;
+        kalimantanEl.style.fill = FG;
+        sulawesiEl.style.fill = FG;
+        malukuEl.style.fill = FG;
+        irianJayaEl.style.fill = FG;
+        seramEl.style.fill = FG;
+        javaEl.style.fill = FG;
+        baliEl.style.fill = FG;
+        lombokEl.style.fill = FG;
+        sumbaEl.style.fill = FG;
+        floresEl.style.fill = FG;
+        timorEl.style.fill = FG;
+        usaEl.style.fill = FG;
+        alaskaEl.style.fill = FG;
+        hawaiiEl.style.fill = FG;
+        hawaii1El.style.fill = FG;
+        hawaii2El.style.fill = FG;
+        hawaii3El.style.fill = FG;
       }
       function checkIdle() {
         if (!active) {
