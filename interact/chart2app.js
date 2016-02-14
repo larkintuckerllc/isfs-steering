@@ -7,17 +7,17 @@
       bindto: '#my_chart',
       data: {
         columns: [
-          ['India', 0.21],
-          ['Ecuador', 0.12],
-          ['USA', 0.12],
-          ['Thailand', 0.11],
-          ['Vietnam', 0.07],
-          ['Indonesia', 0.07],
-          ['Mexico', 0.06],
-          ['China', 0.04],
-          ['Malaysia', 0.02],
-          ['Peru', 0.02],
-          ['Other', 0.16],
+          ['USA', 0.33],
+          ['Japan', 0.18],
+          ['China', 0.10],
+          ['South Korea', 0.08],
+          ['Australia', 0.05],
+          ['Germany', 0.03],
+          ['Canada', 0.03],
+          ['France', 0.02],
+          ['Switzerland', 0.02],
+          ['Taiwan', 0.02],
+          ['Other', 0.14]
         ],
         type: 'pie'
       },
@@ -25,7 +25,7 @@
         pattern: [
           'rgb(255,0,0)',
           'rgb(0,255,0)',
-          'rgb(0,255,0)',
+          'rgb(0,0,255)',
           'rgb(128,128,0)',
           'rgb(128,0,128)',
           'rgb(0,128,128)',

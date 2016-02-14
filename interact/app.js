@@ -14,36 +14,78 @@
           y: 734,
           fill: 'rgba(255,0,0,1)',
           line: 'rgba(255,0,0,0.3)',
-          percent: 1 // USA
+          percent:  0.33// USA
         },
         {
           x: 815,
           y: 750,
           fill: 'rgba(0,255,0,1)',
           line: 'rgba(0,255,0,0.3)',
-          percent: 1 // JAPAN
+          percent: 0.18 // JAPAN
         },
         {
           x: 753,
           y: 786,
           fill: 'rgba(0,0,255,1)',
           line: 'rgba(0,0,255,0.3)',
-          percent: 1 // CHINA
+          percent:  0.10 // CHINA
         },
         {
           x: 795,
           y: 745,
           fill: 'rgba(128,128,0,1)',
           line: 'rgba(128,128,0,0.3)',
-          percent: 1 // SOUTH KOREA
+          percent: 0.08 // SOUTH KOREA
         },
         {
           x: 840,
           y: 1000,
           fill: 'rgba(128,0,128,1)',
           line: 'rgba(128,0,128,0.3)',
-          percent: 1 // AUSTRALIA
+          percent: 0.05 // AUSTRALIA
         },
+        {
+          x: 480,
+          y: 715,
+          fill: 'rgba(0,128,128,1)',
+          line: 'rgba(0,128,128,0.3)',
+          percent: 0.03 // GERMANY
+        },
+        {
+          x: 219,
+          y: 674,
+          fill: 'rgba(255,128,0,1)',
+          line: 'rgba(255,128,0,0.3)',
+          percent: 0.03 // CANADA
+        },
+        {
+          x: 460,
+          y: 725,
+          fill: 'rgba(255,0,128,1)',
+          line: 'rgba(255,0,128,0.3)',
+          percent: 0.02 // FRANCE
+        },
+        {
+          x: 470,
+          y: 730,
+          fill: 'rgba(128,255,0,1)',
+          line: 'rgba(128,255,0,0.3)',
+          percent: 0.02 // SWITZERLAND
+        },
+        {
+          x: 785,
+          y: 786,
+          fill: 'rgba(0,255,128,1)',
+          line: 'rgba(0,255,128,0.3)',
+          percent:  0.02 // TAIWAN
+        },
+        {
+          x: 0,
+          y: 0,
+          fill: 'rgba(128,128,128,1)',
+          line: 'rgba(128,128,128,0.3)',
+          percent:  0.86 // TAIWAN
+        }
       ];
       var COUNTRIES = [
         {
@@ -130,6 +172,7 @@
       var BG = '#bfbfbf';
       var FG = '#888888';
       var windowOpen = false;
+      var window2Open = false;
       var active = true;
       var chartVisible = false;
       var chart2Visible = false;
@@ -171,7 +214,10 @@
       var australiaEl = document.getElementById('australia');
       var tasmaniaEl = document.getElementById('tasmania');
       var germanyEl = document.getElementById('germany');
+      var canadaEl = document.getElementById('canada');
       var franceEl = document.getElementById('france');
+      var switzerlandEl = document.getElementById('switzerland');
+      var taiwanEl = document.getElementById('taiwan');
       var groupEl;
       var grid = new thr0w.Grid(
         frameEl,
@@ -259,6 +305,8 @@
         var i;
         var circleEl;
         chart2Visible = true;
+        window2Open = true;
+        wm.openWindow('vietnam', 100, 1420, 400, 450, 'chart2.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
         for (i = 0; i < COUNTRIES2.length; i++) {
           if (COUNTRIES[i].x !== 0) {
@@ -292,11 +340,18 @@
         australiaEl.style.fill = FG;
         tasmaniaEl.style.fill = FG;
         germanyEl.style.fill = FG;
+        canadaEl.style.fill = FG;
         franceEl.style.fill = FG;
         chinaEl.style.fill = FG;
+        switzerlandEl.style.fill = FG;
+        taiwanEl.style.fill = FG;
       }
       function hideVietnam() {
         chart2Visible = false;
+        if (window2Open) {
+          wm.closeWindow('vietnam');
+          window2Open = false;
+        }
         backgroundEl.removeChild(groupEl);
         usaEl.style.fill = BG;
         alaskaEl.style.fill = BG;
@@ -312,8 +367,11 @@
         australiaEl.style.fill = BG;
         tasmaniaEl.style.fill = BG;
         germanyEl.style.fill = BG;
+        canadaEl.style.fill = FG;
         franceEl.style.fill = BG;
         chinaEl.style.fill = BG;
+        switzerlandEl.style.fill = BG;
+        taiwanEl.style.fill = BG;
       }
       function createArc(sx, sy, ex, ey, color) {
         var dx = Math.abs((sx - ex) / 2);
@@ -401,8 +459,12 @@
         active = false;
         window.setTimeout(checkIdle, INTERVAL);
       }
-      function windowCloseCallback() {
-        windowOpen = false;
+      function windowCloseCallback(e) {
+        if (e.detail.id === 'usa') {
+          windowOpen = false;
+        } else {
+          window2Open = false;
+        }
       }
     }
     function messageCallback() {}
