@@ -4,8 +4,8 @@
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
     thr0w.setBase('http://localhost'); // DEV
-    thr0w.setBase('http://192.168.1.2'); // PROD
-    // thr0w.addAdminTools(document.getElementById('my_frame'),
+    // thr0w.setBase('http://192.168.1.2'); // PROD
+    thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
       var COUNTRIES2 = [
@@ -167,6 +167,165 @@
           percent: 0.16 // REMAINING
         }
       ];
+      var COUNTRIESFULL2 = [
+        {
+          x: 219,
+          y: 734,
+          fill: 'rgba(255,0,0,1)',
+          line: 'rgba(255,0,0,0.3)',
+          percent:  0.33// USA
+        },
+        {
+          x: 815,
+          y: 750,
+          fill: 'rgba(0,255,0,1)',
+          line: 'rgba(0,255,0,0.3)',
+          percent: 0.18 // JAPAN
+        },
+        {
+          x: 753,
+          y: 786,
+          fill: 'rgba(0,0,255,1)',
+          line: 'rgba(0,0,255,0.3)',
+          percent:  0.10 // CHINA
+        },
+        {
+          x: 795,
+          y: 745,
+          fill: 'rgba(128,128,0,1)',
+          line: 'rgba(128,128,0,0.3)',
+          percent: 0.08 // SOUTH KOREA
+        },
+        {
+          x: 840,
+          y: 1000,
+          fill: 'rgba(128,0,128,1)',
+          line: 'rgba(128,0,128,0.3)',
+          percent: 0.05 // AUSTRALIA
+        },
+        {
+          x: 480,
+          y: 715,
+          fill: 'rgba(0,128,128,1)',
+          line: 'rgba(0,128,128,0.3)',
+          percent: 0.03 // GERMANY
+        },
+        {
+          x: 219,
+          y: 674,
+          fill: 'rgba(255,128,0,1)',
+          line: 'rgba(255,128,0,0.3)',
+          percent: 0.03 // CANADA
+        },
+        {
+          x: 460,
+          y: 725,
+          fill: 'rgba(255,0,128,1)',
+          line: 'rgba(255,0,128,0.3)',
+          percent: 0.02 // FRANCE
+        },
+        {
+          x: 470,
+          y: 730,
+          fill: 'rgba(128,255,0,1)',
+          line: 'rgba(128,255,0,0.3)',
+          percent: 0.02 // SWITZERLAND
+        },
+        {
+          x: 785,
+          y: 786,
+          fill: 'rgba(0,255,128,1)',
+          line: 'rgba(0,255,128,0.3)',
+          percent:  0.02 // TAIWAN
+        },
+        {
+          x: 0,
+          y: 0,
+          fill: 'rgba(128,128,128,1)',
+          line: 'rgba(128,128,128,0.3)',
+          percent:  0.86 // TAIWAN
+        }
+      ];
+      var COUNTRIESFULL = [
+        {
+          x: 3463,
+          y: 1745,
+          fill: 'rgba(255,0,0,1)',
+          line: 'rgba(255,0,0,0.3)',
+          percent: 0.21 // INDIA
+        },
+        {
+          x: 1200,
+          y: 2118,
+          fill: 'rgba(0,255,0,1)',
+          line: 'rgba(0,255,0,0.3)',
+          percent: 0.12 // ECUADOR
+        },
+        {
+          x: 1126,
+          y: 1560,
+          fill: 'rgba(0,0,255,1)',
+          line: 'rgba(0,0,255,0.3)',
+          percent: 0.12 // USA
+        },
+        {
+          x: 3778,
+          y: 1820,
+          fill: 'rgba(128,128,0,1)',
+          line: 'rgba(128,128,0,0.3)',
+          percent: 0.11 // THAILAND
+        },
+        {
+          id: 'vietnam',
+          x: 3874,
+          y: 1889,
+          fill: 'rgba(128,0,128,1)',
+          line: 'rgba(128,0,128,0.3)',
+          percent: 0.07 // VIETNAM
+        },
+        {
+          x: 4029,
+          y: 2110,
+          fill: 'rgba(0,128,128,1)',
+          line: 'rgba(0,128,128,0.3)',
+          percent: 0.07 // INDONESIA
+        },
+        {
+          x: 891,
+          y: 1785,
+          fill: 'rgba(255,128,0,1)',
+          line: 'rgba(255,128,0,0.3)',
+          percent: 0.06 // MEXICO
+        },
+        {
+          x: 3923,
+          y: 1651,
+          fill: 'rgba(255,0,128,1)',
+          line: 'rgba(255,0,128,0.3)',
+          percent: 0.04 // CHINA
+        },
+        {
+          x: 3840,
+          y: 2149,
+          fill: 'rgba(128,255,0,1)',
+          line: 'rgba(128,255,0,0.3)',
+          percent: 0.02 // MALAYSIA
+        },
+        {
+          x: 1235,
+          y: 2245,
+          fill: 'rgba(0,255,128,1)',
+          line: 'rgba(0,255,128,0.3)',
+          percent: 0.02 // PERU
+        },
+        {
+          x: 0,
+          y: 0,
+          fill: 'rgba(128,128,128,1)',
+          line: 'rgba(128,128,128,0.3)',
+          percent: 0.16 // REMAINING
+        }
+      ];
       var SVG_NS = 'http://www.w3.org/2000/svg';
       var INTERVAL = 1000 * 60;
       var BG = '#bfbfbf';
@@ -219,13 +378,74 @@
       var switzerlandEl = document.getElementById('switzerland');
       var taiwanEl = document.getElementById('taiwan');
       var groupEl;
-      var grid = new thr0w.Grid(
-        frameEl,
-        document.getElementById('my_content'), [
-          thr0w.getChannel()
-        ]);
+      var fullScreen = document.location.pathname.indexOf('full') !== -1;
+      var usaX;
+      var usaY;
+      var vietnamX;
+      var vietnamY;
+      var strokeWidth;
+      var dashLength;
+      var radius;
+      var countries;
+      var countries2;
+      var grid;
+      if (fullScreen) {
+        usaX = 994;
+        usaY = 1387;
+        vietnamX = 3878;
+        vietnamY = 1802;
+        strokeWidth = 50;
+        dashLength = 4000;
+        radius = 32;
+        countries = COUNTRIESFULL;
+        countries2 = COUNTRIESFULL2;
+        grid = new thr0w.FlexGrid(
+          frameEl,
+          document.getElementById('my_content'), [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8, 9]
+          ],
+          [
+          {
+            width: 1920,
+            height: 1080,
+            spacing: 28,
+            scale: 0.84,
+            margin: 20
+          },
+          {
+            width: 1920,
+            height: 1080,
+            spacing: 28,
+            scale: 0.84,
+            margin: 60
+          },
+          {
+            width: 1080,
+            height: 1920,
+            spacing: 112,
+            padding: 111
+          }
+          ]);
+      } else {
+        usaX = 190;
+        usaY = 740;
+        vietnamX = 750;
+        vietnamY = 823;
+        strokeWidth = 10;
+        radius = 8;
+        dashLength = 1000;
+        countries = COUNTRIES;
+        countries2 = COUNTRIES2;
+        grid = new thr0w.Grid(
+          frameEl,
+          document.getElementById('my_content'), [
+            thr0w.getChannel()
+          ]);
+        thr0w.draw.load(grid);
+      }
       var wm = new thr0w.windows.WindowManager('my_wm', grid);
-      thr0w.draw.load(grid);
       document.addEventListener('thr0w_windows_close_window',
         windowCloseCallback);
       thr0w.svg.manage(grid, svgEl, 10);
@@ -239,7 +459,7 @@
         addEventListener('mousedown', toggleVietnam);
       document.getElementById('shrimp2').
         addEventListener('touchstart', toggleVietnam);
-      checkIdle();
+      // checkIdle();
       function keepActive(e) {
         e.preventDefault();
         active = true;
@@ -308,20 +528,20 @@
         window2Open = true;
         wm.openWindow('vietnam', 100, 1420, 400, 450, 'chart2.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
-        for (i = 0; i < COUNTRIES2.length; i++) {
-          if (COUNTRIES[i].x !== 0) {
+        for (i = 0; i < countries2.length; i++) {
+          if (countries2[i].x !== 0) {
             groupEl.appendChild(createArc(
-              750,
-              823,
-              COUNTRIES2[i].x,
-              COUNTRIES2[i].y,
-              COUNTRIES2[i].line
+              vietnamX,
+              vietnamY,
+              countries2[i].x,
+              countries2[i].y,
+              countries2[i].line
             ));
             circleEl = document.createElementNS(SVG_NS, 'circle');
-            circleEl.setAttribute('cx', COUNTRIES2[i].x);
-            circleEl.setAttribute('cy', COUNTRIES2[i].y);
-            circleEl.setAttribute('r', 8);
-            circleEl.setAttribute('fill', COUNTRIES2[i].fill);
+            circleEl.setAttribute('cx', countries2[i].x);
+            circleEl.setAttribute('cy', countries2[i].y);
+            circleEl.setAttribute('r', radius);
+            circleEl.setAttribute('fill', countries2[i].fill);
             groupEl.appendChild(circleEl);
           }
         }
@@ -394,8 +614,10 @@
         var curveEl = document.createElementNS(SVG_NS, 'path');
         curveEl.setAttribute('d', movement);
         curveEl.setAttribute('stroke', color);
-        curveEl.setAttribute('stroke-width', 10);
+        curveEl.setAttribute('stroke-width', strokeWidth);
         curveEl.setAttribute('fill', 'none');
+        curveEl.style.strokeDasharray = dashLength;
+        curveEl.style.strokeDashoffset = dashLength;
         curveEl.classList.add('curve');
         return curveEl;
       }
@@ -406,20 +628,20 @@
         windowOpen = true;
         wm.openWindow('usa', 100, 1420, 400, 450, 'chart.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
-        for (i = 0; i < COUNTRIES.length; i++) {
-          if (COUNTRIES[i].x !== 0) {
+        for (i = 0; i < countries.length; i++) {
+          if (countries[i].x !== 0) {
             groupEl.appendChild(createArc(
-              COUNTRIES[i].x,
-              COUNTRIES[i].y,
-              190,
-              740,
-              COUNTRIES[i].line
+              countries[i].x,
+              countries[i].y,
+              usaX,
+              usaY,
+              countries[i].line
             ));
             circleEl = document.createElementNS(SVG_NS, 'circle');
-            circleEl.setAttribute('cx', COUNTRIES[i].x);
-            circleEl.setAttribute('cy', COUNTRIES[i].y);
-            circleEl.setAttribute('r', 8);
-            circleEl.setAttribute('fill', COUNTRIES[i].fill);
+            circleEl.setAttribute('cx', countries[i].x);
+            circleEl.setAttribute('cy', countries[i].y);
+            circleEl.setAttribute('r', radius);
+            circleEl.setAttribute('fill', countries[i].fill);
             groupEl.appendChild(circleEl);
           }
         }
