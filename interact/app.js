@@ -388,17 +388,21 @@
       var radius;
       var countries;
       var countries2;
+      var windowX;
+      var windowY;
       var grid;
       if (fullScreen) {
-        usaX = 994;
-        usaY = 1387;
-        vietnamX = 3878;
-        vietnamY = 1802;
+        usaX = 1019;
+        usaY = 1412;
+        vietnamX = 3903;
+        vietnamY = 1827;
         strokeWidth = 50;
         dashLength = 4000;
         radius = 32;
         countries = COUNTRIESFULL;
         countries2 = COUNTRIESFULL2;
+        windowX = 300;
+        windowY = 3252;
         grid = new thr0w.FlexGrid(
           frameEl,
           document.getElementById('my_content'), [
@@ -438,6 +442,8 @@
         dashLength = 1000;
         countries = COUNTRIES;
         countries2 = COUNTRIES2;
+        windowX = 100;
+        windowY = 1420;
         grid = new thr0w.Grid(
           frameEl,
           document.getElementById('my_content'), [
@@ -465,7 +471,7 @@
         addEventListener('mousedown', toggleVietnam);
       document.getElementById('shrimp2').
         addEventListener('touchstart', toggleVietnam);
-      // checkIdle();
+      checkIdle();
       function keepActive(e) {
         e.preventDefault();
         active = true;
@@ -536,7 +542,7 @@
         sync.update();
         sync.idle();
         window2Open = true;
-        wm.openWindow('vietnam', 100, 1420, 400, 450, 'chart2.html');
+        wm.openWindow('vietnam', windowX, windowY, 400, 450, 'chart2.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
         for (i = 0; i < countries2.length; i++) {
           if (countries2[i].x !== 0) {
@@ -640,7 +646,7 @@
         sync.update();
         sync.idle();
         windowOpen = true;
-        wm.openWindow('usa', 100, 1420, 400, 450, 'chart.html');
+        wm.openWindow('usa', windowX, windowY, 400, 450, 'chart.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
         for (i = 0; i < countries.length; i++) {
           if (countries[i].x !== 0) {
