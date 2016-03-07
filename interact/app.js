@@ -3,8 +3,8 @@
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
-    thr0w.setBase('http://localhost'); // DEV
-    // thr0w.setBase('http://192.168.1.2'); // PROD
+    // thr0w.setBase('http://localhost'); // DEV
+    thr0w.setBase('http://192.168.1.2'); // PROD
     thr0w.addAdminTools(document.getElementById('my_frame'),
       connectCallback, messageCallback);
     function connectCallback() {
@@ -84,7 +84,7 @@
           y: 0,
           fill: 'rgba(128,128,128,1)',
           line: 'rgba(128,128,128,0.3)',
-          percent:  0.86 // TAIWAN
+          percent:  0.14 // REST
         }
       ];
       var COUNTRIES = [
@@ -169,71 +169,71 @@
       ];
       var COUNTRIESFULL2 = [
         {
-          x: 219,
-          y: 734,
+          x: 1136,
+          y: 1398,
           fill: 'rgba(255,0,0,1)',
           line: 'rgba(255,0,0,0.3)',
           percent:  0.33// USA
         },
         {
-          x: 815,
-          y: 750,
+          x: 4230,
+          y: 1381,
           fill: 'rgba(0,255,0,1)',
           line: 'rgba(0,255,0,0.3)',
           percent: 0.18 // JAPAN
         },
         {
-          x: 753,
-          y: 786,
+          x: 3791,
+          y: 1496,
           fill: 'rgba(0,0,255,1)',
           line: 'rgba(0,0,255,0.3)',
           percent:  0.10 // CHINA
         },
         {
-          x: 795,
-          y: 745,
+          x: 4073,
+          y: 1403,
           fill: 'rgba(128,128,0,1)',
           line: 'rgba(128,128,0,0.3)',
           percent: 0.08 // SOUTH KOREA
         },
         {
-          x: 840,
-          y: 1000,
+          x: 4228,
+          y: 2574,
           fill: 'rgba(128,0,128,1)',
           line: 'rgba(128,0,128,0.3)',
           percent: 0.05 // AUSTRALIA
         },
         {
-          x: 480,
-          y: 715,
+          x: 2467,
+          y: 1441,
           fill: 'rgba(0,128,128,1)',
           line: 'rgba(0,128,128,0.3)',
           percent: 0.03 // GERMANY
         },
         {
-          x: 219,
-          y: 674,
+          x: 1077,
+          y: 1094,
           fill: 'rgba(255,128,0,1)',
           line: 'rgba(255,128,0,0.3)',
           percent: 0.03 // CANADA
         },
         {
-          x: 460,
-          y: 725,
+          x: 2369,
+          y: 1339,
           fill: 'rgba(255,0,128,1)',
           line: 'rgba(255,0,128,0.3)',
           percent: 0.02 // FRANCE
         },
         {
-          x: 470,
-          y: 730,
+          x: 2438,
+          y: 1337,
           fill: 'rgba(128,255,0,1)',
           line: 'rgba(128,255,0,0.3)',
           percent: 0.02 // SWITZERLAND
         },
         {
-          x: 785,
-          y: 786,
+          x: 4048,
+          y: 1644,
           fill: 'rgba(0,255,128,1)',
           line: 'rgba(0,255,128,0.3)',
           percent:  0.02 // TAIWAN
@@ -243,7 +243,7 @@
           y: 0,
           fill: 'rgba(128,128,128,1)',
           line: 'rgba(128,128,128,0.3)',
-          percent:  0.86 // TAIWAN
+          percent:  0.14 // REST
         }
       ];
       var COUNTRIESFULL = [

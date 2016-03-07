@@ -4,6 +4,7 @@ html, body {
 }
 #my_frame {
   position: relative;
+  overflow: hidden;
   width: 1080px;
   height: 1920px;
 }
