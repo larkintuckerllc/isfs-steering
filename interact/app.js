@@ -446,6 +446,12 @@
         thr0w.draw.load(grid);
       }
       var wm = new thr0w.windows.WindowManager('my_wm', grid);
+      var sync = new thr0w.Sync(
+        grid,
+        'chart',
+        message,
+        receive
+      );
       document.addEventListener('thr0w_windows_close_window',
         windowCloseCallback);
       thr0w.svg.manage(grid, svgEl, 10);
@@ -488,6 +494,8 @@
       }
       function hideUSA() {
         chartVisible = false;
+        sync.update();
+        sync.idle();
         if (windowOpen) {
           wm.closeWindow('usa');
           windowOpen = false;
@@ -525,6 +533,8 @@
         var i;
         var circleEl;
         chart2Visible = true;
+        sync.update();
+        sync.idle();
         window2Open = true;
         wm.openWindow('vietnam', 100, 1420, 400, 450, 'chart2.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
@@ -568,6 +578,8 @@
       }
       function hideVietnam() {
         chart2Visible = false;
+        sync.update();
+        sync.idle();
         if (window2Open) {
           wm.closeWindow('vietnam');
           window2Open = false;
@@ -625,6 +637,8 @@
         var i;
         var circleEl;
         chartVisible = true;
+        sync.update();
+        sync.idle();
         windowOpen = true;
         wm.openWindow('usa', 100, 1420, 400, 450, 'chart.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
@@ -673,6 +687,28 @@
         hawaii1El.style.fill = FG;
         hawaii2El.style.fill = FG;
         hawaii3El.style.fill = FG;
+      }
+      function message() {
+        return {
+          chartVisible: chartVisible,
+          chart2Visible: chart2Visible
+        };
+      }
+      function receive(data) {
+        if (data.chartVisible !== chartVisible) {
+          if (data.chartVisible) {
+            showUSA();
+          } else {
+            hideUSA();
+          }
+        }
+        if (data.chart2Visible !== chart2Visible) {
+          if (data.chart2Visible) {
+            showVietnam();
+          } else {
+            hideVietnam();
+          }
+        }
       }
       function checkIdle() {
         if (!active) {
