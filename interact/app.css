@@ -2,6 +2,23 @@ html, body {
   margin: 0px;
   padding: 0px;
 }
+#full_button {
+  position: absolute;
+  z-index: 1;
+  right: 10px;
+  top: 10px;
+  border: solid 5px rgb(128, 128, 128);
+  width: 70px;
+  height: 70px;
+}
+#full_button__inside {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  border: solid 5px rgb(128, 128, 128);
+  width: 20px;
+  height: 20px; 
+}
 #my_frame {
   position: relative;
   overflow: hidden;

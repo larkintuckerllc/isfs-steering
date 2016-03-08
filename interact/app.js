@@ -1,8 +1,11 @@
 (function() {
   'use strict';
+  var CHANNELS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  var INTERACTIVE = [6, 7, 8, 9];
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
+    var active = true;
     // thr0w.setBase('http://localhost'); // DEV
     thr0w.setBase('http://192.168.1.2'); // PROD
     thr0w.addAdminTools(document.getElementById('my_frame'),
@@ -332,7 +335,6 @@
       var FG = '#888888';
       var windowOpen = false;
       var window2Open = false;
-      var active = true;
       var chartVisible = false;
       var chart2Visible = false;
       var frameEl = document.getElementById('my_frame');
@@ -433,6 +435,10 @@
           }
           ]);
       } else {
+        document.getElementById('full_button')
+          .addEventListener('touchstart', handleFullButton);
+        document.getElementById('full_button')
+          .addEventListener('mousedown', handleFullButton);
         usaX = 190;
         usaY = 740;
         vietnamX = 750;
@@ -471,10 +477,13 @@
         addEventListener('mousedown', toggleVietnam);
       document.getElementById('shrimp2').
         addEventListener('touchstart', toggleVietnam);
-      checkIdle();
+      if (INTERACTIVE.indexOf(thr0w.getChannel()) !== -1) {
+        checkIdle();
+      }
       function keepActive(e) {
         e.preventDefault();
         active = true;
+        thr0w.thr0wChannel(CHANNELS, {type: 'active'});
       }
       function toggleShrimp(e) {
         e.preventDefault();
@@ -718,7 +727,11 @@
       }
       function checkIdle() {
         if (!active) {
-          window.location.href = '../';
+          if (fullScreen) {
+            thr0w.thr0wChannel(CHANNELS, {type: 'idle'});
+          } else {
+            window.location.href = '../';
+          }
         }
         active = false;
         window.setTimeout(checkIdle, INTERVAL);
@@ -730,7 +743,19 @@
           window2Open = false;
         }
       }
+      function handleFullButton(e) {
+        e.preventDefault();
+        thr0w.thr0wChannel(CHANNELS, {type: 'full'});
+      }
     }
-    function messageCallback() {}
+    function messageCallback(data) {
+      if (data.message.type === 'idle') {
+        document.location.href = '../';
+      } else if (data.message.type === 'active') {
+        active = true;
+      } else if (data.message.type === 'full') {
+        document.location.href = 'full.html';
+      }
+    }
   }
 })();

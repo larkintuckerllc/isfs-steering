@@ -139,6 +139,10 @@
 
     }
   }
-  function messageCallback() {}
+  function messageCallback(data) {
+    if (data.message.type === 'full') {
+      document.location.href = 'interact/full.html';
+    }
+  }
 })();
 
