@@ -1,5 +1,7 @@
 (function() {
   'use strict';
+  var MODES = ['?world', '?hunger'];
+  var MODE_INTERVAL = 1000 * 60 * 30;
   var INTERVAL = 33;
   var SCREENSAVER_INTERVAL = 1000 * 60 * 20;
   var TOUCH_SCREENS = [6, 7, 8, 9];
@@ -10,18 +12,22 @@
   var HAND_HORIZONTAL = 1080 - 400;
   var HAND_VERTICAL = 1920 - 400;
   var thr0w = window.thr0w;
-  var frameEl = document.getElementById('my_frame');
   document.addEventListener('DOMContentLoaded', ready);
   function ready() {
+    var currentMode;
+    var frameEl = document.getElementById('my_frame');
+    var startMode = window.location.search;
     // thr0w.setBase('http://localhost'); // DEV
     thr0w.setBase('http://192.168.1.2'); // PROD
     thr0w.addAdminTools(frameEl,
       connectCallback, messageCallback);
     function connectCallback() {
+      var loopInterval;
       var shift = 0;
       var screensaverShift = 0;
       var map1El = document.getElementById('map1');
       var map2El = document.getElementById('map2');
+      var hungerEl = document.getElementById('hunger');
       var rightHandEl = document.getElementById('right_hand');
       var leftHandEl = document.getElementById('left_hand');
       var screensaverEl = document.getElementById('screensaver');
@@ -55,6 +61,12 @@
         }
         ]);
       var width = grid.getWidth();
+      var syncMode = new thr0w.Sync(
+        grid,
+        'mode',
+        messageMode,
+        receiveMode
+      );
       var sync = new thr0w.Sync(
         grid,
         'animation',
@@ -67,8 +79,10 @@
         messageScreensaver,
         receiveScreensaver
       );
+      switchMode(startMode);
       if (thr0w.getChannel() === 0) {
-        loop();
+        syncMode.update();
+        window.setInterval(loopMode, MODE_INTERVAL);
         startScreensaver();
       }
       if (TOUCH_SCREENS.indexOf(thr0w.getChannel()) !== -1) {
@@ -80,12 +94,22 @@
       }
       frameEl.addEventListener('mousedown', interact);
       frameEl.addEventListener('touchstart', interact);
+      function messageMode() {
+        return {
+          mode: currentMode
+        };
+      }
+      function receiveMode(data) {
+        console.log(data);
+        switchMode(MODES[data.mode]);
+      }
       function message() {
         return {
           shift: shift
         };
       }
       function receive(data) {
+        console.log(data);
         map1El.style.marginLeft = data.shift + 'px';
         map2El.style.marginLeft = data.shift + 'px';
       }
@@ -97,12 +121,36 @@
       function receiveScreensaver(data) {
         screensaverEl.style.left = data.shift + 'px';
       }
+      function switchMode(mode) {
+        currentMode = MODES.indexOf(mode);
+        currentMode = currentMode !== -1 ? currentMode : 0;
+        if (mode === '?hunger') {
+          window.clearInterval(loopInterval);
+          map1El.style.display = 'none';
+          map2El.style.display = 'none';
+          hungerEl.style.display = 'block';
+        } else {
+          hungerEl.style.display = 'none';
+          map1El.style.display = 'block';
+          map2El.style.display = 'block';
+          if (thr0w.getChannel() === 0) {
+            loopInterval = window.setInterval(loop, INTERVAL);
+          }
+        }
+      }
+      function loopMode() {
+        currentMode += 1;
+        currentMode = currentMode !== MODES.length ? currentMode : 0;
+        switchMode(MODES[currentMode]);
+        syncMode.update();
+        syncMode.idle();
+      }
+      window.loopMode = loopMode;
       function loop() {
         shift = shift < WIDTH ? shift + 1 : 0;
         map1El.style.marginLeft = shift + 'px';
         map2El.style.marginLeft = shift + 'px';
         sync.update();
-        window.setTimeout(loop, INTERVAL);
       }
       function loopHand() {
         var handEl = Math.random() > 0.5 ? leftHandEl : rightHandEl;
@@ -140,6 +188,7 @@
     }
   }
   function messageCallback(data) {
+    console.log(data);
     if (data.message.type === 'full') {
       document.location.href = 'interact/full.html';
     }
