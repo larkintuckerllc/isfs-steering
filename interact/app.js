@@ -436,9 +436,7 @@
           ]);
       } else {
         document.getElementById('full_button')
-          .addEventListener('touchstart', handleFullButton);
-        document.getElementById('full_button')
-          .addEventListener('mousedown', handleFullButton);
+          .addEventListener('click', handleFullButton);
         usaX = 190;
         usaY = 740;
         vietnamX = 750;
@@ -470,23 +468,17 @@
       frameEl.addEventListener('mousedown', keepActive);
       frameEl.addEventListener('touchstart', keepActive);
       document.getElementById('shrimp').
-        addEventListener('mousedown', toggleShrimp);
-      document.getElementById('shrimp').
-        addEventListener('touchstart', toggleShrimp);
+        addEventListener('click', toggleShrimp);
       document.getElementById('shrimp2').
-        addEventListener('mousedown', toggleVietnam);
-      document.getElementById('shrimp2').
-        addEventListener('touchstart', toggleVietnam);
+        addEventListener('click', toggleVietnam);
       if (INTERACTIVE.indexOf(thr0w.getChannel()) !== -1) {
         checkIdle();
       }
-      function keepActive(e) {
-        e.preventDefault();
+      function keepActive() {
         active = true;
         thr0w.thr0wChannel(CHANNELS, {type: 'active'});
       }
-      function toggleShrimp(e) {
-        e.preventDefault();
+      function toggleShrimp() {
         if (chart2Visible) {
           hideVietnam();
         }
@@ -496,8 +488,7 @@
           showUSA();
         }
       }
-      function toggleVietnam(e) {
-        e.preventDefault();
+      function toggleVietnam() {
         if (chartVisible) {
           hideUSA();
         }
@@ -743,8 +734,7 @@
           window2Open = false;
         }
       }
-      function handleFullButton(e) {
-        e.preventDefault();
+      function handleFullButton() {
         thr0w.thr0wChannel(CHANNELS, {type: 'full'});
       }
     }

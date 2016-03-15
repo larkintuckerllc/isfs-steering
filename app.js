@@ -171,8 +171,7 @@
         loopScreensaver();
         window.setTimeout(startScreensaver, SCREENSAVER_INTERVAL);
       }
-      function interact(e) {
-        e.preventDefault();
+      function interact() {
         window.location.href = 'interact/';
       }
       function loopScreensaver() {
