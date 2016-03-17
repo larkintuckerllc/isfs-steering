@@ -48,6 +48,10 @@ html, body {
   display: none;
   background-image: url("hunger.jpg");
 }
+#warming {
+  display: none;
+  background-image: url("warming.png");
+}
 #right_hand {
   background-image: url("right_hand.png");
 }

@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  var MODES = ['?world', '?hunger'];
+  var MODES = ['?world', '?hunger', '?warming'];
   var MODE_INTERVAL = 1000 * 60 * 30;
   var INTERVAL = 33;
   var SCREENSAVER_INTERVAL = 1000 * 60 * 20;
@@ -28,6 +28,7 @@
       var map1El = document.getElementById('map1');
       var map2El = document.getElementById('map2');
       var hungerEl = document.getElementById('hunger');
+      var warmingEl = document.getElementById('warming');
       var rightHandEl = document.getElementById('right_hand');
       var leftHandEl = document.getElementById('left_hand');
       var screensaverEl = document.getElementById('screensaver');
@@ -128,8 +129,16 @@
           window.clearInterval(loopInterval);
           map1El.style.display = 'none';
           map2El.style.display = 'none';
+          warmingEl.style.display = 'none';
           hungerEl.style.display = 'block';
+        } else if (mode === '?warming') {
+          window.clearInterval(loopInterval);
+          map1El.style.display = 'none';
+          map2El.style.display = 'none';
+          hungerEl.style.display = 'none';
+          warmingEl.style.display = 'block';
         } else {
+          warmingEl.style.display = 'none';
           hungerEl.style.display = 'none';
           map1El.style.display = 'block';
           map2El.style.display = 'block';
