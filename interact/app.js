@@ -333,8 +333,6 @@
       var INTERVAL = 1000 * 60;
       var BG = '#bfbfbf';
       var FG = '#888888';
-      var windowOpen = false;
-      var window2Open = false;
       var chartVisible = false;
       var chart2Visible = false;
       var frameEl = document.getElementById('my_frame');
@@ -462,9 +460,7 @@
         message,
         receive
       );
-      document.addEventListener('thr0w_windows_close_window',
-        windowCloseCallback);
-      thr0w.svg.manage(grid, svgEl, 10);
+      new thr0w.svg.Svg(grid, svgEl, 10);
       frameEl.addEventListener('mousedown', keepActive);
       frameEl.addEventListener('touchstart', keepActive);
       document.getElementById('shrimp').
@@ -502,10 +498,7 @@
         chartVisible = false;
         sync.update();
         sync.idle();
-        if (windowOpen) {
-          wm.closeWindow('usa');
-          windowOpen = false;
-        }
+        wm.closeAllWindows();
         backgroundEl.removeChild(groupEl);
         indiaEl.style.fill = BG;
         ecuadorEl.style.fill = BG;
@@ -541,7 +534,6 @@
         chart2Visible = true;
         sync.update();
         sync.idle();
-        window2Open = true;
         wm.openWindow('vietnam', windowX, windowY, 400, 450, 'chart2.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
         for (i = 0; i < countries2.length; i++) {
@@ -586,10 +578,7 @@
         chart2Visible = false;
         sync.update();
         sync.idle();
-        if (window2Open) {
-          wm.closeWindow('vietnam');
-          window2Open = false;
-        }
+        wm.closeAllWindows();
         backgroundEl.removeChild(groupEl);
         usaEl.style.fill = BG;
         alaskaEl.style.fill = BG;
@@ -645,7 +634,6 @@
         chartVisible = true;
         sync.update();
         sync.idle();
-        windowOpen = true;
         wm.openWindow('usa', windowX, windowY, 400, 450, 'chart.html');
         groupEl = document.createElementNS(SVG_NS, 'g');
         for (i = 0; i < countries.length; i++) {
@@ -726,13 +714,6 @@
         }
         active = false;
         window.setTimeout(checkIdle, INTERVAL);
-      }
-      function windowCloseCallback(e) {
-        if (e.detail.id === 'usa') {
-          windowOpen = false;
-        } else {
-          window2Open = false;
-        }
       }
       function handleFullButton() {
         thr0w.thr0wChannel(CHANNELS, {type: 'full'});
